@@ -33,3 +33,6 @@ Then visit `http://localhost:8000`.
 
 For a root personal website, name the repository `YOUR_USERNAME.github.io`; then the URL will be `https://YOUR_USERNAME.github.io/`.
 
+## About the reference template
+
+The reference repository at `https://github.com/saadnaseem/personal_page` is public, but it does not appear to include a license file. 
