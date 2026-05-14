@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bioinspired Neuromorphic Nanocomposites — Prashant Dhakal</title>
+  <meta name="description" content="Flexible CNT/PDMS and ZnO/PVP nanocomposite memristors that switch at picowatt power, learn associatively, and recover small-sample accuracy lost by conventional ANNs. Matter (2024)." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/FortAwesome/Font-Awesome@6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="projects.css" />
+</head>
+<body data-project="bioinspired">
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient__wash"></div>
+    <div class="ambient__grid"></div>
+    <div class="ambient__grain"></div>
+  </div>
+
+  <div class="reading-progress" aria-hidden="true">
+    <div class="reading-progress__bar" id="readingBar"></div>
+  </div>
+
+  <header class="proj-nav">
+    <div class="proj-nav__inner proj-container">
+      <a href="index.html#projects" class="proj-nav__back">
+        <i class="fa-solid fa-arrow-left"></i> <span>Portfolio</span>
+      </a>
+      <div class="proj-nav__crumb">
+        <span class="proj-nav__chip">AI Hardware</span>
+        <span class="proj-nav__sep">/</span>
+        <span class="proj-nav__title">Bioinspired Neuromorphic Nanocomposites</span>
+      </div>
+      <button id="themeToggle" class="nav__theme" aria-label="Toggle color theme">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="proj-container">
+    <!-- 1. ABOVE THE FOLD -->
+    <section class="proj-hero">
+      <div class="proj-hero__copy">
+        <span class="proj-hero__tag">AI Hardware &middot; Advanced Materials</span>
+        <h1 class="proj-hero__title">A flexible synapse that learns by association at <em>picowatt</em> power.</h1>
+        <p class="proj-hero__pitch">
+          Solution-processed CNT/PDMS and ZnO/PVP memristors that switch on <strong>0.14 nW</strong> and pair
+          electrical and optical stimuli into a stable association &mdash; the same trick a brain uses. A
+          5&times;5 hardware crossbar wired into a small ANN recovers <strong>+14 pp</strong> of accuracy lost in the
+          data-sparse regime.
+        </p>
+        <ul class="proj-hero__stack">
+          <li>CNT/PDMS</li><li>ZnO/PVP</li><li>5&times;5 crossbar</li><li>Photo + electric stimuli</li><li>Keras ANN</li>
+        </ul>
+        <dl class="proj-hero__metrics">
+          <div><dt>Switching power</dt><dd>0.14<small> nW</small></dd></div>
+          <div><dt>Learning efficiency</dt><dd>10<sup>8</sup><small> &middot; record</small></dd></div>
+          <div><dt>Endurance</dt><dd>10<sup>4</sup><small>+ cycles</small></dd></div>
+          <div><dt>MNIST @ 90 imgs</dt><dd>90<small>% vs 76%</small></dd></div>
+        </dl>
+        <p class="proj-hero__status">
+          <em>Matter</em> 7(3), 1230&ndash;1244 &middot; 2024
+          <span class="pill pill--published">Published</span>
+        </p>
+      </div>
+      <figure class="proj-hero__graphic">
+        <img src="Projects/Bioinspired Neuromorphic Nanocomposites/figures_matter/page01_img01_1325x1325.jpeg" alt="Biological associative learning compared with brain-inspired crossbar architecture under combined electrical and photonic stimulation" />
+      </figure>
+    </section>
+
+    <!-- 2. WHY IT MATTERS -->
+    <section class="proj-section">
+      <h2>Why it matters</h2>
+      <p>
+        Edge AI hits an energy wall: a wearable, in-sensor classifier cannot carry a datacenter power budget,
+        and silicon synaptic elements still train slowly (<span class="kw">2&ndash;16 min</span>), forget within
+        hours, and are rigid &mdash; a poor match for smart skin or roll-to-roll integration.
+      </p>
+      <p>
+        The brain still beats neuromorphic silicon by orders of magnitude in energy and area, in large part
+        because it <em>learns by association</em> across multi-modal stimuli. This work asks whether a
+        solution-processed nanocomposite can do the same &mdash; built from chemistry, not lithography.
+      </p>
+    </section>
+
+    <!-- 3. HOW IT WORKS -->
+    <section class="proj-section">
+      <h2>How it works</h2>
+      <div class="proj-method">
+        <ul class="proj-list">
+          <li><strong>Two device stacks.</strong> Au / <code>CNT&ndash;PDMS</code> / ITO on PET for low-power flexible switching; Ag / <code>ZnO&ndash;PVP</code> / ITO for photo-active associative learning.</li>
+          <li><strong>Heterostimuli modulation.</strong> Electrical pulses drift Ag<sup>+</sup> filaments; UV light triggers photo-reduction inside ZnO. Pairing the two writes a persistent, non-volatile associated state.</li>
+          <li><strong>Solution processing only.</strong> Tip-sonication, spin coating, thermal evaporation at 10<sup>&minus;5</sup>&ndash;10<sup>&minus;7</sup> Torr. No lithography &mdash; roll-to-roll compatible.</li>
+          <li><strong>Crossbar hardware.</strong> 5&times;5 array integrated into a Keras ANN to evaluate in-sensor computing in a deliberately data-sparse regime.</li>
+          <li><strong>Reliability envelope.</strong> Cyclic I&ndash;V to 10<sup>4</sup>+ pulses, 1&nbsp;ms pulse-measure, 365&nbsp;nm UV, bending from flat to <code>R&nbsp;=&nbsp;5&nbsp;mm</code> with no on/off-current collapse.</li>
+        </ul>
+        <div class="proj-method__figs">
+          <figure class="proj-figure">
+            <img class="proj-figure__media" src="Projects/Bioinspired Neuromorphic Nanocomposites/figures_matter/page05_img01_1569x1209.jpeg" alt="Biological associative learning via volume transmission and chemical neuromodulation mapped onto a machine analogue using photonic broadcast and photo-chemical reduction at an Ag/ZnO/ITO junction" />
+            <figcaption><b>Bio&nbsp;to&nbsp;Machine</b> Volume transmission and chemical neuromodulation in a biological synapse are mirrored by broadcast light + photo-chemical reduction at a wired Ag/ZnO/PVP device.</figcaption>
+          </figure>
+          <figure class="proj-figure">
+            <img class="proj-figure__media" src="Projects/Bioinspired Neuromorphic Nanocomposites/figures_matter/page07_img01_2018x1773.jpeg" alt="Three operating regimes of the device: volatile ion drift, training under combined light and bias, non-volatile retention; supporting I-V curves, EDS map of Ag/Zn distribution, and photoresponse currents at varying light intensities" />
+            <figcaption><b>Mechanism</b> Volatile ion drift becomes a persistent state once light and bias co-act &mdash; Ag/ZnO EDS map shows the filament that locks the association in place.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. WHAT WE FOUND -->
+    <section class="proj-section">
+      <h2>What we found</h2>
+      <div class="proj-results-grid">
+        <article class="proj-stat">
+          <strong>0.14<small> nW</small></strong>
+          <span>Switching power</span>
+          <em>Record-low for flexible organic neuromorphic devices.</em>
+        </article>
+        <article class="proj-stat">
+          <strong>92.5<small>%</small></strong>
+          <span>Photonic classification</span>
+          <em>Digits "7" vs "4" on the 5&times;5 crossbar from photonic stimuli alone.</em>
+        </article>
+        <article class="proj-stat">
+          <strong>90<small>% vs 76%</small></strong>
+          <span>MNIST &middot; 90-image regime</span>
+          <em>ALM-integrated ANN closes the gap that normally needs ~1,000 samples.</em>
+        </article>
+        <article class="proj-stat">
+          <strong>32.8<small>&times;</small></strong>
+          <span>Power efficiency gain</span>
+          <em>And 5.64&times; area gain when one ANN layer is replaced by the crossbar.</em>
+        </article>
+      </div>
+
+      <div class="proj-gallery">
+        <figure class="proj-figure">
+          <img class="proj-figure__media" src="Projects/Bioinspired Neuromorphic Nanocomposites/figures_matter/page08_img01_1320x1273.jpeg" alt="Pavlovian conditioning experiment: bell as conditioned stimulus and food pulse as unconditioned stimulus, response trace showing bell-only firing after training, and scatter of energy consumption vs learning efficiency with this work as the outlier" />
+          <figcaption><b>Pavlovian</b> Light (bell) alone triggers a response only after pairing with electrical pulses (food). The energy&nbsp;&times;&nbsp;efficiency scatter places this device as an outlier vs. prior synapses.</figcaption>
+        </figure>
+        <figure class="proj-figure">
+          <img class="proj-figure__media" src="Projects/Bioinspired Neuromorphic Nanocomposites/figures_matter/page10_img01_1569x1269.jpeg" alt="Brain-inspired associative computing on a physical 5x5 crossbar: hardware integration with electrical and photonic inputs, before/after training probability bars showing successful classification, and photonic-response confusion matrix" />
+          <figcaption><b>Crossbar</b> Photonic input alone is classified into the right output neuron after associative learning &mdash; the confusion matrix shows clean diagonal recognition across digits 0&ndash;9.</figcaption>
+        </figure>
+        <figure class="proj-figure">
+          <img class="proj-figure__media" src="Projects/Bioinspired Neuromorphic Nanocomposites/figures_matter/page13_img01_1320x1080.jpeg" alt="Test accuracy as a function of training-set size: ALM-integrated ANN line consistently above the conventional ANN baseline across the 10 to 100 image regime" />
+          <figcaption><b>Sample efficiency</b> Across the entire data-sparse range (10&ndash;100 images), the ALM-integrated ANN sits above a conventional ANN baseline &mdash; widest gap at the smallest budgets.</figcaption>
+        </figure>
+        <figure class="proj-figure proj-figure--wide">
+          <img class="proj-figure__media" src="Projects/Bioinspired Neuromorphic Nanocomposites/figures_advcomp/page08_img01_2008x1506.jpeg" alt="Mechanical bending characterization from flat to R=5mm with on/off current stability across multiple cycles, photograph of the flexible device held between gloved fingers, and scatter plot of switching power vs bend radius placing this work at picowatt levels" />
+          <figcaption><b>Flex</b> Bending from flat to <code>R&nbsp;=&nbsp;5&nbsp;mm</code> leaves on/off currents intact across cycles; the device sits orders of magnitude below prior flexible memristors on the power&ndash;curvature map.</figcaption>
+        </figure>
+      </div>
+
+      <p class="proj-impact">
+        <strong>So what.</strong> In-sensor pattern recognition on wearable, chemical, and optical platforms
+        without datacenter-scale training. The recipe is roll-to-roll compatible, so it transfers to smart skin,
+        edge medical sensors, and robotic perception with minimal process change.
+      </p>
+    </section>
+
+    <!-- 5. PAPER & RESOURCES -->
+    <section class="proj-section">
+      <h2>Paper &amp; resources</h2>
+      <div class="proj-resources">
+        <a class="proj-resource" href="https://doi.org/10.1016/j.matt.2024.01.008" target="_blank" rel="noopener">
+          <i class="fa-solid fa-flask"></i>
+          <div>
+            <span>Primary article</span>
+            <strong><em>Matter</em> 7(3), 1230&ndash;1244 (2024)</strong>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square proj-resource__go"></i>
+        </a>
+        <a class="proj-resource" href="https://doi.org/10.1016/j.matt.2024.01.008" target="_blank" rel="noopener">
+          <i class="fa-solid fa-fingerprint"></i>
+          <div>
+            <span>DOI &middot; Matter</span>
+            <strong>10.1016/j.matt.2024.01.008</strong>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square proj-resource__go"></i>
+        </a>
+        <a class="proj-resource" href="https://doi.org/10.1007/s42114-022-00599-9" target="_blank" rel="noopener">
+          <i class="fa-solid fa-flask"></i>
+          <div>
+            <span>Companion article</span>
+            <strong><em>Adv. Composites &amp; Hybrid Mater.</em> 6, 14 (2023)</strong>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square proj-resource__go"></i>
+        </a>
+        <a class="proj-resource" href="https://doi.org/10.1007/s42114-022-00599-9" target="_blank" rel="noopener">
+          <i class="fa-solid fa-fingerprint"></i>
+          <div>
+            <span>DOI &middot; Adv. Composites</span>
+            <strong>10.1007/s42114-022-00599-9</strong>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square proj-resource__go"></i>
+        </a>
+        <a class="proj-resource" href="https://scholar.google.com/citations?user=SEhDRjNTLyMC&hl=en" target="_blank" rel="noopener">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <div>
+            <span>Author</span>
+            <strong>Prashant Dhakal</strong>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square proj-resource__go"></i>
+        </a>
+      </div>
+
+      <div class="proj-citation">
+        <div class="proj-citation__head">
+          <span>BibTeX &middot; Matter 2024</span>
+          <button class="proj-citation__copy" data-copy-target="cite-matter" aria-label="Copy BibTeX">
+            <i class="fa-regular fa-copy"></i> Copy
+          </button>
+        </div>
+<pre id="cite-matter">@article{kim2024heterostimuli,
+  title   = {Heterostimuli chemo-modulation of neuromorphic nanocomposites for time-, power-, and data-efficient machine learning},
+  author  = {Kim, Jae Gwang and Liu, Ruochen and Dhakal, Prashant and Hou, Aolin and Gao, Chongjie and Qiu, Jingjing and Merkel, Cory and Zoran, Mark and Wang, Shiren},
+  journal = {Matter}, volume = {7}, number = {3}, pages = {1230--1244},
+  year    = {2024}, doi = {10.1016/j.matt.2024.01.008}
+}</pre>
+      </div>
+
+      <div class="proj-citation">
+        <div class="proj-citation__head">
+          <span>BibTeX &middot; Adv. Composites 2023</span>
+          <button class="proj-citation__copy" data-copy-target="cite-advcomp" aria-label="Copy BibTeX">
+            <i class="fa-regular fa-copy"></i> Copy
+          </button>
+        </div>
+<pre id="cite-advcomp">@article{liu2023neuromorphic,
+  title   = {Neuromorphic properties of flexible carbon nanotube/polydimethylsiloxane nanocomposites},
+  author  = {Liu, Ruochen and Kim, Jae Gwang and Dhakal, Prashant and Li, Wei and Ma, Jun and Hou, Aolin and Merkel, Cory and Qiu, Jingjing and Zoran, Mark and Wang, Shiren},
+  journal = {Advanced Composites and Hybrid Materials},
+  volume  = {6}, pages = {14}, year = {2023},
+  doi     = {10.1007/s42114-022-00599-9}
+}</pre>
+      </div>
+
+      <ul class="proj-chips-inline">
+        <li class="proj-chips-inline__label">Skills</li>
+        <li>Nanocomposite synthesis</li>
+        <li>Memristor fabrication</li>
+        <li>Crossbar integration</li>
+        <li>Thermal evaporation</li>
+        <li>SEM / EDS / AFM</li>
+        <li>Keithley pulse-measure</li>
+        <li>UV photostimulation</li>
+        <li>Bend-radius reliability</li>
+        <li>Synaptic plasticity (LTP / LTD / PPF)</li>
+        <li>Few-shot ANN (Python, Keras)</li>
+        <li>SCLC transport modeling</li>
+      </ul>
+    </section>
+
+    <!-- FOOTER NAV -->
+    <nav class="proj-footernav">
+      <a class="proj-footernav__back" href="index.html#projects">
+        <i class="fa-solid fa-arrow-left"></i> <span>All projects</span>
+      </a>
+      <div class="proj-footernav__siblings">
+        <a class="proj-footernav__prev" href="sustainable-ceramic-am.html">
+          <span><i class="fa-solid fa-arrow-left"></i> Previous</span>
+          <strong>Energy-Efficient Ceramic AM</strong>
+        </a>
+        <a class="proj-footernav__next" href="physics-informed-lpbf.html">
+          <span>Next <i class="fa-solid fa-arrow-right"></i></span>
+          <strong>Physics-Informed Few-Shot LPBF</strong>
+        </a>
+      </div>
+    </nav>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>&copy; <span id="year"></span> Prashant Dhakal <span>&middot; Built in the open, perpetually under revision.</span></p>
+      <a href="#" class="footer__up" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></a>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox__close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    <div class="lightbox__inner">
+      <img class="lightbox__img" alt="" />
+      <div class="lightbox__caption"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="projects.js"></script>
+</body>
+</html>

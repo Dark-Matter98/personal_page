@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Physics-Informed Few-Shot LPBF Prediction (PIKNN) — Prashant Dhakal</title>
+  <meta name="description" content="PIKNN: a training-free, physics-informed k-NN classifier that screens LPBF process windows for unseen alloys, with +18.3 pp accuracy gain over a meta-trained Prototypical Network." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/FortAwesome/Font-Awesome@6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="projects.css" />
+</head>
+<body data-project="lpbf">
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient__wash"></div>
+    <div class="ambient__grid"></div>
+    <div class="ambient__grain"></div>
+  </div>
+
+  <div class="reading-progress" aria-hidden="true">
+    <div class="reading-progress__bar" id="readingBar"></div>
+  </div>
+
+  <header class="proj-nav">
+    <div class="proj-nav__inner proj-container">
+      <a href="index.html#projects" class="proj-nav__back">
+        <i class="fa-solid fa-arrow-left"></i> <span>Portfolio</span>
+      </a>
+      <div class="proj-nav__crumb">
+        <span class="proj-nav__chip">Manufacturing ML</span>
+        <span class="proj-nav__sep">/</span>
+        <span class="proj-nav__title">Physics-Informed Few-Shot LPBF Prediction</span>
+      </div>
+      <button id="themeToggle" class="nav__theme" aria-label="Toggle color theme">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="proj-container">
+    <!-- 1. ABOVE THE FOLD -->
+    <section class="proj-hero">
+      <div class="proj-hero__copy">
+        <span class="proj-hero__tag">Manufacturing ML &middot; Process Engineering</span>
+        <h1 class="proj-hero__title">A training-free classifier that qualifies <em>unseen LPBF alloys</em> in seconds.</h1>
+        <p class="proj-hero__pitch">
+          <strong>PIKNN</strong> screens laser powder bed fusion process windows in an 8-D physics-engineered
+          space. No learnable parameters, no meta-training &mdash; a single handbook lookup per alloy.
+          <strong>+18.3 pp</strong> over a meta-trained Prototypical Network on held-out Ti6Al4V.
+        </p>
+        <ul class="proj-hero__stack">
+          <li>Physics-informed ML</li><li>Few-shot (1&ndash;10 shot)</li><li>k-NN</li><li>scikit-learn</li><li>PyTorch (baseline)</li>
+        </ul>
+        <dl class="proj-hero__metrics">
+          <div><dt>Dataset</dt><dd>1,579<small> builds &middot; 6 alloys</small></dd></div>
+          <div><dt>Held-out gain</dt><dd>+18.3<small> pp</small></dd></div>
+          <div><dt>Separability</dt><dd>&minus;46<small>% DBI</small></dd></div>
+          <div><dt>Train time</dt><dd>0<small> s vs 11.9 s</small></dd></div>
+        </dl>
+        <p class="proj-hero__status">
+          <em>J. Intelligent Manufacturing</em> &middot; IISE 2026
+          <span class="pill pill--review">Under Review</span>
+        </p>
+      </div>
+      <figure class="proj-hero__graphic">
+        <img src="Projects/Physics-Informed Few-Shot LPBF Prediction/figures/image5.png" alt="Physics-informed feature pipeline: five process parameters combined with three derived physics features (energy density, power density, thermal diffusivity) to classify relative density" />
+      </figure>
+    </section>
+
+    <!-- 2. WHY IT MATTERS -->
+    <section class="proj-section">
+      <h2>Why it matters</h2>
+      <div class="proj-method">
+        <div>
+          <p>
+            Bringing a new LPBF alloy from lab to certified aerospace production takes <span class="kw">5&ndash;15 years</span>
+            and tens of millions of dollars. A single complex component can demand <strong>$4M+</strong> and two years
+            just to qualify under NIST building-block protocols, and every new feedstock or parameter shift restarts the cycle.
+          </p>
+          <p>
+            Conventional ML approaches need <strong>10<sup>3</sup>&ndash;10<sup>4</sup> labeled experiments per alloy</strong>
+            to generalize &mdash; effectively rebuilding the dataset every time. But the <em>thermal physics of LPBF
+            is already known</em> before any build runs. If cross-material screening lived in physics rather than data,
+            qualification cycles would collapse from years to days.
+          </p>
+        </div>
+        <div class="proj-method__figs">
+          <figure class="proj-figure">
+            <img class="proj-figure__media" src="Projects/Physics-Informed Few-Shot LPBF Prediction/qualification burden.png" alt="NIST building-block qualification pyramid showing four tiers from bottom to top: Coupons (weeks, dollars in thousands, tens of tests), Elements (months, $10K+, hundreds of tests), Sub-components (~year, $100K+, hundreds to thousands of tests), System (5 to 15 years, millions of dollars); a red callout below states that any change among 100+ key parameters resets the process back to coupons" />
+            <figcaption><b>Qualification ladder</b> Any one of 100+ key parameter changes resets the process back to coupon-level testing &mdash; where weeks and dollars compound up through elements, sub-components, and system qualification.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. HOW IT WORKS -->
+    <section class="proj-section">
+      <h2>How it works</h2>
+      <div class="proj-method">
+        <ul class="proj-list">
+          <li><strong>Process knobs (&psi;<sub>1</sub>&ndash;&psi;<sub>5</sub>).</strong> Laser power, scan speed, hatch spacing, layer thickness, powder size &mdash; the five primary LPBF parameters.</li>
+          <li><strong>Derived physics (&psi;<sub>6</sub>&ndash;&psi;<sub>7</sub>).</strong> <code>Volumetric energy density</code> captures melting completeness; <code>power density</code> separates conduction-mode from keyhole-mode regimes.</li>
+          <li><strong>Cross-material bridge (&psi;<sub>8</sub>).</strong> <code>Thermal diffusivity &alpha;<sub>m</sub></code> from a materials handbook carries ~30.6% of squared distance across alloys &mdash; the alloy-physics bridge that ProtoNet learns and PIKNN simply reads.</li>
+          <li><strong>Classifier.</strong> 1-NN in standardized 8-D space. <em>Zero learnable parameters</em>, no softmax, no gradient updates &mdash; vs. ProtoNet's 13,056 parameters and 10,000 meta-training episodes.</li>
+          <li><strong>Validation.</strong> 4-way K-shot (K &isin; {1,3,5,10}), 300 episodes per config, 95% bootstrap CIs. Held-out alloys Ti6Al4V and CuCrZr (37&times; thermal-diffusivity contrast).</li>
+        </ul>
+        <div class="proj-method__figs">
+          <figure class="proj-figure">
+            <img class="proj-figure__media" src="Projects/Physics-Informed Few-Shot LPBF Prediction/figures/image10.png" alt="Side-by-side architecture: ProtoNet learns an embedding from support and query sets via backpropagation, while PIKNN replaces the entire embedding network with a physics feature mapping plus standardization, then takes a nearest-neighbor decision" />
+            <figcaption><b>Architecture</b> ProtoNet trains an embedding for 10,000 episodes (top). PIKNN swaps that whole network for a physics feature map plus a 1-NN lookup (bottom) &mdash; same support/query interface, zero learned weights.</figcaption>
+          </figure>
+          <div class="proj-eq">
+            <span class="proj-eq__label">Energy density &middot; Power density</span>
+            ED = P / (v &middot; h &middot; l) &nbsp;&middot;&nbsp; PD = 4P / (&pi;d&sup2;)
+          </div>
+          <figure class="proj-figure">
+            <img class="proj-figure__media" src="Projects/Physics-Informed Few-Shot LPBF Prediction/figures/image3.png" alt="Dataset composition: pie chart of alloy distribution across 316L, AlSi10Mg, 18Ni300, IN718, Ti6Al4V, CuCrZr; histograms of the seven process parameters; and relative-density distribution with violin plot showing heavy concentration above 95%" />
+            <figcaption><b>Dataset</b> 1,579 builds across six alloys. The two held-out alloys (Ti6Al4V, CuCrZr) sit at opposite ends of the thermal-diffusivity range &mdash; a hard cross-material test.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. WHAT WE FOUND -->
+    <section class="proj-section">
+      <h2>What we found</h2>
+      <div class="proj-results-grid">
+        <article class="proj-stat">
+          <strong>58.0<small>% vs 39.7%</small></strong>
+          <span>Ti6Al4V &middot; 10-shot</span>
+          <em>PIKNN vs. trained ProtoNet on a held-out alloy &mdash; <strong>+18.3 pp</strong>.</em>
+        </article>
+        <article class="proj-stat">
+          <strong>52.0<small>% vs 46.1%</small></strong>
+          <span>CuCrZr &middot; 1-shot</span>
+          <em>+5.9 pp over ProtoNet; +10 pp over a trained SVM.</em>
+        </article>
+        <article class="proj-stat">
+          <strong>&minus;46<small>% DBI</small></strong>
+          <span>Class separability</span>
+          <em>Davies&ndash;Bouldin: 11.65 (learned) &rarr; 6.27 (physics) on held-out union.</em>
+        </article>
+        <article class="proj-stat">
+          <strong>0 s<small> training</small></strong>
+          <span>vs. 11.9 s ProtoNet</span>
+          <em>200 experimental hours of screening compressed to 1.25 s of compute.</em>
+        </article>
+      </div>
+
+      <div class="proj-gallery">
+        <figure class="proj-figure proj-figure--wide">
+          <img class="proj-figure__media" src="Projects/Physics-Informed Few-Shot LPBF Prediction/figures/image12.png" alt="Few-shot learning accuracy as a function of K-shot from 1 to 10 for Ti6Al4V and CuCrZr alloys, comparing PIKNN circles solid line, ProtoNet triangles dashed line, and SVM squares dotted line; PIKNN consistently above the baselines especially at higher K" />
+          <figcaption><b>Few-shot gain</b> PIKNN (circles) tracks above ProtoNet (triangles) and SVM (squares) at every K-shot, widening at 5 and 10 shots where physics features generalize cleanly to the unseen alloy.</figcaption>
+        </figure>
+        <figure class="proj-figure">
+          <img class="proj-figure__media" src="Projects/Physics-Informed Few-Shot LPBF Prediction/figures/image14.png" alt="t-SNE projection contrasting physics features on the left, where relative-density classes form clean colored regions, with ProtoNet embeddings on the right, where the same class colors are mixed and overlap" />
+          <figcaption><b>t-SNE</b> Physics features preserve relative-density neighborhoods across both alloys (left). The learned ProtoNet embedding mixes the classes for the unseen feedstock (right).</figcaption>
+        </figure>
+        <figure class="proj-figure">
+          <img class="proj-figure__media" src="Projects/Physics-Informed Few-Shot LPBF Prediction/figures/image1.png" alt="Laser powder bed fusion process: schematic of laser, mirror, powder supply and build plate, and a photograph of the build chamber with active laser tracks emitting sparks across a layer of coupons" />
+          <figcaption><b>Context</b> Each coupon in the dataset is one full LPBF print &mdash; minutes of build time, hours of post-density measurement. Cutting screening from 10<sup>3</sup>+ to ~10 coupons per alloy is the lever.</figcaption>
+        </figure>
+      </div>
+
+      <p class="proj-impact">
+        <strong>So what.</strong> Drop in a new feedstock, look up its thermal diffusivity, run 1&ndash;10 calibration
+        coupons &mdash; get a process-window screen in seconds. Nothing to retrain when alloys or machines change.
+        Applies anywhere physics is known but data is sparse: aerospace alloys, Cu thermal management, high-entropy alloys.
+      </p>
+    </section>
+
+    <!-- 5. PAPER & RESOURCES -->
+    <section class="proj-section">
+      <h2>Paper &amp; resources</h2>
+      <div class="proj-resources">
+        <a class="proj-resource" href="Projects/Physics-Informed Few-Shot LPBF Prediction/iise_main.pdf" target="_blank" rel="noopener">
+          <i class="fa-solid fa-person-chalkboard"></i>
+          <div>
+            <span>IISE 2026 talk</span>
+            <strong>Presentation slides</strong>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square proj-resource__go"></i>
+        </a>
+        <a class="proj-resource" href="https://doi.org/10.7910/DVN/VPBQK8" target="_blank" rel="noopener">
+          <i class="fa-solid fa-database"></i>
+          <div>
+            <span>Dataset (Dataverse)</span>
+            <strong>10.7910/DVN/VPBQK8</strong>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square proj-resource__go"></i>
+        </a>
+        <a class="proj-resource" href="#" aria-disabled="true">
+          <i class="fa-solid fa-hourglass-half"></i>
+          <div>
+            <span>Journal version</span>
+            <strong>Under review &middot; J. Intelligent Mfg.</strong>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square proj-resource__go"></i>
+        </a>
+        <a class="proj-resource" href="https://scholar.google.com/citations?user=SEhDRjNTLyMC&hl=en" target="_blank" rel="noopener">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <div>
+            <span>Author</span>
+            <strong>Prashant Dhakal</strong>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square proj-resource__go"></i>
+        </a>
+      </div>
+
+      <div class="proj-citation">
+        <div class="proj-citation__head">
+          <span>BibTeX &middot; under review</span>
+          <button class="proj-citation__copy" data-copy-target="cite-piknn" aria-label="Copy BibTeX">
+            <i class="fa-regular fa-copy"></i> Copy
+          </button>
+        </div>
+<pre id="cite-piknn">@article{dhakal2026piknn,
+  title   = {Physics-Informed Training-Free Few-Shot Learning for Cross-Material Relative Density Prediction in Laser Powder Bed Fusion},
+  author  = {Dhakal, Prashant and Kim, Jae Gwang and Hou, Aolin and Wu, Xiaofei and Wang, Shiren},
+  journal = {Journal of Intelligent Manufacturing},
+  year    = {2026}, note = {Under review}
+}</pre>
+      </div>
+
+      <ul class="proj-chips-inline">
+        <li class="proj-chips-inline__label">Skills</li>
+        <li>Physics-informed ML</li>
+        <li>Few-shot learning</li>
+        <li>Cross-material transfer</li>
+        <li>Feature engineering</li>
+        <li>LPBF process physics</li>
+        <li>Melt-pool / thermal diffusivity</li>
+        <li>Davies&ndash;Bouldin, t-SNE</li>
+        <li>Bootstrap CIs</li>
+        <li>scikit-learn / NumPy / PyTorch</li>
+        <li>Qualification cost analysis</li>
+      </ul>
+    </section>
+
+    <nav class="proj-footernav">
+      <a class="proj-footernav__back" href="index.html#projects">
+        <i class="fa-solid fa-arrow-left"></i> <span>All projects</span>
+      </a>
+      <div class="proj-footernav__siblings">
+        <a class="proj-footernav__prev" href="bioinspired-neuromorphic.html">
+          <span><i class="fa-solid fa-arrow-left"></i> Previous</span>
+          <strong>Bioinspired Neuromorphic Nanocomposites</strong>
+        </a>
+        <a class="proj-footernav__next" href="bayesian-digital-twin.html">
+          <span>Next <i class="fa-solid fa-arrow-right"></i></span>
+          <strong>Bayesian Digital Twin</strong>
+        </a>
+      </div>
+    </nav>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>&copy; <span id="year"></span> Prashant Dhakal <span>&middot; Built in the open, perpetually under revision.</span></p>
+      <a href="#" class="footer__up" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></a>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox__close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    <div class="lightbox__inner">
+      <img class="lightbox__img" alt="" />
+      <div class="lightbox__caption"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="projects.js"></script>
+</body>
+</html>

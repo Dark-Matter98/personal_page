@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Energy-Efficient Ceramic Additive Manufacturing (REAP) — Prashant Dhakal</title>
+  <meta name="description" content="REAP: a reactive additive manufacturing route that consolidates complex-geometry ceramics at ~100x lower energy and three orders of magnitude lower CO2 than conventional sintering. Gyroid heat exchanger demonstrator. JCP (2024)." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/FortAwesome/Font-Awesome@6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="projects.css" />
+</head>
+<body data-project="sustainable">
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient__wash"></div>
+    <div class="ambient__grid"></div>
+    <div class="ambient__grain"></div>
+  </div>
+
+  <div class="reading-progress" aria-hidden="true">
+    <div class="reading-progress__bar" id="readingBar"></div>
+  </div>
+
+  <header class="proj-nav">
+    <div class="proj-nav__inner proj-container">
+      <a href="index.html#projects" class="proj-nav__back">
+        <i class="fa-solid fa-arrow-left"></i> <span>Portfolio</span>
+      </a>
+      <div class="proj-nav__crumb">
+        <span class="proj-nav__chip">Sustainable AM</span>
+        <span class="proj-nav__sep">/</span>
+        <span class="proj-nav__title">Energy-Efficient Ceramic AM (REAP)</span>
+      </div>
+      <button id="themeToggle" class="nav__theme" aria-label="Toggle color theme">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="proj-container">
+    <!-- 1. ABOVE THE FOLD -->
+    <section class="proj-hero">
+      <div class="proj-hero__copy">
+        <span class="proj-hero__tag">Sustainable Manufacturing &middot; Ceramics</span>
+        <h1 class="proj-hero__title">A ceramic 3D printer that <em>burns its own kiln</em>.</h1>
+        <p class="proj-hero__pitch">
+          <strong>REAP</strong> couples photothermal direct ink writing with a self-propagating exothermic
+          reaction. A 10-second ignition releases a <strong>2,000 &deg;C</strong> front that consolidates a
+          complex preform at <strong>~100&times; lower energy</strong> and three orders of magnitude lower
+          CO<sub>2</sub> than conventional sintering.
+        </p>
+        <ul class="proj-hero__stack">
+          <li>Reactive AM</li><li>Self-propagating high-T synthesis</li><li>Polymer-derived ceramics</li><li>COMSOL</li><li>LCA</li>
+        </ul>
+        <dl class="proj-hero__metrics">
+          <div><dt>Energy</dt><dd>~100<small>&times; less</small></dd></div>
+          <div><dt>CO<sub>2</sub></dt><dd>2.23<small> kg/kg ceramic</small></dd></div>
+          <div><dt>Consolidation</dt><dd>~5<small> s</small></dd></div>
+          <div><dt>Yield strength</dt><dd>180<small> MPa</small></dd></div>
+        </dl>
+        <p class="proj-hero__status">
+          <em>J. Cleaner Production</em> 452, 142122 &middot; 2024
+          <span class="pill pill--published">Published &middot; Patent Pending</span>
+        </p>
+      </div>
+      <figure class="proj-hero__graphic">
+        <img src="Projects/Sustainable AM/figures/page03_img02_1835x771.jpeg" alt="REAP process flow: reactive elemental powder mixture combined with preceramic oligomers extruded under UV light to print a green preform, then ignited so a reaction front sweeps through the part, with five thermal imaging frames showing the 2000 degree Celsius front propagating across a honeycomb lattice" />
+      </figure>
+    </section>
+
+    <!-- 2. WHY IT MATTERS -->
+    <section class="proj-section">
+      <h2>Why it matters</h2>
+      <p>
+        Global ceramic production consumes <strong>&gt;182 TWh/year</strong>, with high-temperature firing
+        accounting for <span class="kw">~75% of energy cost</span>. Industrial heating drives roughly half of
+        US greenhouse-gas emissions. Conventional kilns hold parts at &gt;1,000 &deg;C for hours to days; binder
+        jetting and SLA still need lengthy post-sintering.
+      </p>
+      <p>
+        Meanwhile, demand keeps rising for <strong>geometrically complex ceramics</strong> &mdash; gyroid heat
+        exchangers, refractory lattices, hypersonics components &mdash; that pressureless sintering cannot
+        produce. The sector needs a process that breaks the energy&ndash;geometry trade-off and decarbonizes a
+        hard-to-abate industry at the same time.
+      </p>
+    </section>
+
+    <!-- 3. HOW IT WORKS -->
+    <section class="proj-section">
+      <h2>How it works</h2>
+      <div class="proj-method">
+        <ul class="proj-list">
+          <li><strong>Step 1 &mdash; Photothermal printing.</strong> A reactive ink (Ti:Si:C 3:1:2 with <code>SMP10</code> polycarbosilane) extrudes through a 1 mm nozzle with co-located UV at <code>9.6&ndash;11.4 W/cm&sup2;</code> for in-situ cure &mdash; no photoinitiator, tolerates heavy opaque loading.</li>
+          <li><strong>Step 2 &mdash; Self-sustaining ceramization.</strong> A 192 W tungsten basket ignites one spot for ~10 s. <em>Ti + C &rarr; TiC</em> and <em>3Ti + Si + 2C &rarr; Ti<sub>3</sub>SiC<sub>2</sub></em> release a <code>2,000 &deg;C</code> front that self-propagates at ~130 cm/min with <strong>no further external energy</strong>.</li>
+          <li><strong>Energy decoupling.</strong> Because the heat source is intrinsic, external draw is decoupled from part size &mdash; per-cm&sup3; energy <em>falls</em> as parts grow (192 J/cm&sup3; at 10 cm&sup3; &rarr; 19.2 J/cm&sup3; at 100 cm&sup3;).</li>
+          <li><strong>Characterization.</strong> Time-resolved XRD + Rietveld for phase evolution; SEM microstructure; ASTM C1161 strength + C1421 fracture toughness; DSC + FTIR; COMSOL thermal sim (MAPE 2.6% vs. experiment).</li>
+          <li><strong>Lifecycle analysis.</strong> End-to-end CO<sub>2</sub>-eq footprint benchmarked against binder jetting and SLA equivalents.</li>
+        </ul>
+        <div class="proj-method__figs">
+          <figure class="proj-figure">
+            <img class="proj-figure__media" src="Projects/Sustainable AM/figures/page03_img01_1836x971.jpeg" alt="Six-panel composite: reactive ink viscosity versus shear rate compared with as-received SMP10 and heat-treated oligomer, four photographs of printed green preforms including a honeycomb, hex blocks, Olympic rings, and a scaffold, the live UV photothermal nozzle, temperature vs time curves for 64 to 74 weight percent preceramic content, FTIR spectra showing Si-C=C and Si-H2 evolution after cure, and a UV power versus deposition speed process map with degree-of-cure contours" />
+            <figcaption><b>Print envelope</b> Reactive ink rheology, cured green preforms across geometries, FTIR cure verification, and the UV-power &times; deposition-speed window where degree-of-cure stays above 0.6.</figcaption>
+          </figure>
+          <figure class="proj-figure">
+            <img class="proj-figure__media" src="Projects/Sustainable AM/figures/page05_img01_1835x1487.jpeg" alt="Reaction front validation: IR thermal images of the printed sample at 0, 0.5, 1.5, and 2.5 seconds showing a bright propagating front, the matching COMSOL simulation snapshots in the same time intervals, an experimental versus simulation temperature curve that peaks near 2200 degrees Celsius, and a plot of reaction front temperature and propagation speed across preceramic content from 5 to 25 weight percent" />
+            <figcaption><b>Reaction front</b> Live IR images vs. COMSOL agree on a ~2,000 &deg;C front sweeping the preform in &lt;3 s. Propagation speed stays near 130 cm/min while front temperature falls with higher preceramic loading.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. WHAT WE FOUND -->
+    <section class="proj-section">
+      <h2>What we found</h2>
+      <div class="proj-results-grid">
+        <article class="proj-stat">
+          <strong>192 <small>J/cm&sup3;</small></strong>
+          <span>Energy / 10 cm&sup3; part</span>
+          <em>~<strong>100&times; less</strong> than conventional sintering; falls to 19.2 J/cm&sup3; at 100 cm&sup3;.</em>
+        </article>
+        <article class="proj-stat">
+          <strong>2.23 <small>kg/kg</small></strong>
+          <span>CO<sub>2</sub>-eq footprint</span>
+          <em>vs. <strong>3,086 (binder jet)</strong> and 616 (SLA) &mdash; three orders of magnitude lower.</em>
+        </article>
+        <article class="proj-stat">
+          <strong>1.7 <small>MPa&middot;m<sup>1/2</sup></small></strong>
+          <span>Fracture toughness</span>
+          <em>Yield strength 180 MPa; porosity 25.6% (60% lower than prior reactive AM).</em>
+        </article>
+        <article class="proj-stat">
+          <strong>6.5 &deg;C<small> &Delta;T</small></strong>
+          <span>Gyroid HX demonstrator</span>
+          <em>1.5 cm unit cell; leak-free across the tortuous internal topology.</em>
+        </article>
+      </div>
+
+      <div class="proj-gallery">
+        <figure class="proj-figure proj-figure--wide">
+          <img class="proj-figure__media" src="Projects/Sustainable AM/figures/page06_img01_1835x824.jpeg" alt="Two-panel benchmark: left panel is a log-log scatter of energy consumption versus consolidation time clustering conventional sintering, flash sintering, laser sintering, SPS, microwave sintering, and fast firing, with REAP marked as a red ellipse far below all of them at 10 cm cubed and 100 cm cubed specimen sizes; right panel is a stacked bar chart of cradle-to-gate CO2 footprint with binder jetting at 3086 kg CO2 per kg, SLA at 616, and REAP at 2.23 with the small REAP bar broken out at log scale" />
+          <figcaption><b>Benchmark</b> Energy&ndash;time map (left): REAP sits one to two orders of magnitude below every prior sintering route. CO<sub>2</sub> footprint (right): three orders below binder jetting, two below SLA.</figcaption>
+        </figure>
+        <figure class="proj-figure">
+          <img class="proj-figure__media" src="Projects/Sustainable AM/figures/page06_img02_1422x1267.jpeg" alt="Phase evolution figure: stacked XRD patterns at four time points t1 through t4 showing Ti and Si peaks giving way to TiC and ultimately Ti3SiC2 reflections, the corresponding temperature-time trajectory peaking near 2200 degrees Celsius, and two SEM micrographs at 100 micron scale contrasting a rough porous green microstructure with a denser ceramic microstructure" />
+          <figcaption><b>Phase evolution</b> Time-resolved XRD traces Ti and Si peaks collapsing into TiC and Ti<sub>3</sub>SiC<sub>2</sub> as the front passes. SEM shows the porous green preform consolidating into a dense MAX-phase ceramic.</figcaption>
+        </figure>
+        <figure class="proj-figure">
+          <img class="proj-figure__media" src="Projects/Sustainable AM/figures/page07_img01_1422x1040.jpeg" alt="Gyroid ceramic heat exchanger demonstrator: photograph of a black gyroid block alongside a millimeter ruler showing 1.5 cm unit cell, dark-field optical micrograph of the wall at 250 micrometer scale, hot-in hot-out cold-in cold-out temperature traces over 20 seconds, and a labeled IR thermal image of the operating exchanger with hot in arrow on left and cold out arrow on top" />
+          <figcaption><b>Demonstrator</b> 1.5 cm gyroid unit cell printed and reacted in REAP. Steady-state operation gives a 6.5 &deg;C hot-side drop across leak-free internal channels.</figcaption>
+        </figure>
+      </div>
+
+      <p class="proj-impact">
+        <strong>So what.</strong> Decarbonizes a hard-to-abate sector while unlocking gyroid lattice
+        heat exchangers, hypersonic refractories, and MAX-phase components that traditional ceramic processing
+        cannot produce &mdash; with seconds-scale throughput and an efficiency advantage that <em>grows</em> with part size.
+      </p>
+    </section>
+
+    <!-- 5. PAPER & RESOURCES -->
+    <section class="proj-section">
+      <h2>Paper &amp; resources</h2>
+      <div class="proj-resources">
+        <a class="proj-resource" href="https://doi.org/10.1016/j.jclepro.2024.142122" target="_blank" rel="noopener">
+          <i class="fa-solid fa-leaf"></i>
+          <div>
+            <span>Journal article</span>
+            <strong><em>J. Cleaner Production</em> 452, 142122 (2024)</strong>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square proj-resource__go"></i>
+        </a>
+        <a class="proj-resource" href="https://doi.org/10.1016/j.jclepro.2024.142122" target="_blank" rel="noopener">
+          <i class="fa-solid fa-fingerprint"></i>
+          <div>
+            <span>DOI</span>
+            <strong>10.1016/j.jclepro.2024.142122</strong>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square proj-resource__go"></i>
+        </a>
+        <a class="proj-resource" href="#" aria-disabled="true">
+          <i class="fa-solid fa-shield-halved"></i>
+          <div>
+            <span>Patent</span>
+            <strong>Pending</strong>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square proj-resource__go"></i>
+        </a>
+        <a class="proj-resource" href="https://scholar.google.com/citations?user=SEhDRjNTLyMC&hl=en" target="_blank" rel="noopener">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <div>
+            <span>Author</span>
+            <strong>Prashant Dhakal</strong>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square proj-resource__go"></i>
+        </a>
+      </div>
+
+      <div class="proj-citation">
+        <div class="proj-citation__head">
+          <span>BibTeX &middot; JCP 2024</span>
+          <button class="proj-citation__copy" data-copy-target="cite-reap" aria-label="Copy BibTeX">
+            <i class="fa-regular fa-copy"></i> Copy
+          </button>
+        </div>
+<pre id="cite-reap">@article{liu2024reap,
+  title   = {Energy-efficient rapid additive manufacturing of complex geometry ceramics},
+  author  = {Liu, Ruochen and Hou, Aolin and Dhakal, Prashant and Gao, Chongjie and Qiu, Jingjing and Wang, Shiren},
+  journal = {Journal of Cleaner Production}, volume = {452}, pages = {142122},
+  year    = {2024}, doi = {10.1016/j.jclepro.2024.142122}
+}</pre>
+      </div>
+
+      <ul class="proj-chips-inline">
+        <li class="proj-chips-inline__label">Skills</li>
+        <li>Reactive AM (REAP)</li>
+        <li>Self-propagating high-T synthesis</li>
+        <li>Polymer-derived ceramics</li>
+        <li>Photothermal UV curing</li>
+        <li>Direct ink writing</li>
+        <li>Rheology design</li>
+        <li>Gyroid / lattice design</li>
+        <li>Lifecycle CO<sub>2</sub> assessment</li>
+        <li>COMSOL Multiphysics</li>
+        <li>XRD / Rietveld</li>
+        <li>ASTM C1161 / C1421</li>
+        <li>DSC / FTIR</li>
+      </ul>
+    </section>
+
+    <nav class="proj-footernav">
+      <a class="proj-footernav__back" href="index.html#projects">
+        <i class="fa-solid fa-arrow-left"></i> <span>All projects</span>
+      </a>
+      <div class="proj-footernav__siblings">
+        <a class="proj-footernav__prev" href="bayesian-digital-twin.html">
+          <span><i class="fa-solid fa-arrow-left"></i> Previous</span>
+          <strong>Bayesian Digital Twin</strong>
+        </a>
+        <a class="proj-footernav__next" href="bioinspired-neuromorphic.html">
+          <span>Next <i class="fa-solid fa-arrow-right"></i></span>
+          <strong>Bioinspired Neuromorphic Nanocomposites</strong>
+        </a>
+      </div>
+    </nav>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>&copy; <span id="year"></span> Prashant Dhakal <span>&middot; Built in the open, perpetually under revision.</span></p>
+      <a href="#" class="footer__up" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></a>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox__close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    <div class="lightbox__inner">
+      <img class="lightbox__img" alt="" />
+      <div class="lightbox__caption"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="projects.js"></script>
+</body>
+</html>

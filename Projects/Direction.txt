@@ -1,0 +1,17 @@
+ Each project page could include:
+
+  - Project title and one-sentence summary
+  - Problem / motivation
+  - Your role
+  - Methods
+  - Key results
+  - Figures, plots, device photos, workflow diagrams
+  - Publication/preprint links
+  - Full-text PDF, if you have rights to share it
+  - Code/data links, if public
+  - Citation / DOI
+  - Related skills used
+
+
+  A practical first version would be to create one reusable project-page template, then duplicate it for each project. That keeps the design
+  consistent and avoids turning the homepage into a long academic document.

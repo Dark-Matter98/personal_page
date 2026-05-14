@@ -1,0 +1,15 @@
+# Local tooling
+.claude/
+_tmp/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*Zone.Identifier
+*.swp
+
+# Large source recordings (optimized mp4s are committed)
+Projects/digital-twins/Screen Recording*.mov
+
+# Drafts (publish via the linked PDFs / DOIs)
+*.docx

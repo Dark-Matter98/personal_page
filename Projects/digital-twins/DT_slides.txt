@@ -1,0 +1,608 @@
+% =====================================================================
+% PART IV --- STUDY 2: BAYESIAN DIGITAL TWIN (PROPOSAL FOCUS)
+% =====================================================================
+\setcounter{studynum}{2}
+\section{Topic 2 --- Bayesian Digital Twin (Partial Structure)}
+
+% ─────────────────────────────────────────────────────────────
+% SLIDE 15 --- STUDY 2 OPENER
+% ─────────────────────────────────────────────────────────────
+\begin{frame}{Topic 2 --- Partial Mechanistic Structure: Inject It as a Prior}
+
+{\scriptsize\textcolor{accent_teal}{\itshape Tests Objective O2 --- Bayesian mechanistic priors as the inductive bias when partial mechanistic structure is available (partial-structure regime).}}
+
+\begin{block}{Setting}
+\small
+A tumor-on-chip immunotherapy platform where tumor--macrophage interactions follow a \emphasis{known 3-ODE structure}, but four case-specific rate parameters are \warning{uncertain} and must be inferred from only six observations per case.
+\end{block}
+
+\begin{columns}[T]
+\column{0.48\textwidth}
+\begin{exampleblock}{What this study proposes}
+\footnotesize
+A \emphasis{Bayesian digital twin} (BDT) that:
+\begin{itemize}\setlength\itemsep{1pt}
+  \item calibrates uncertain parameters via MCMC
+  \item prioritizes R848 schedules under posterior uncertainty using CVaR
+  \item explains the prioritized pattern mechanistically
+\end{itemize}
+\end{exampleblock}
+
+
+\end{columns}
+
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────
+% SLIDE 16 --- TUMOR-ON-CHIP AS RESEARCH PROBLEM
+% ─────────────────────────────────────────────────────────────
+\begin{frame}{Tumor-on-Chip --- Platform and Intervention}
+\begin{center}
+\includegraphics[width=0.72\textwidth, height=2.0cm, keepaspectratio]{TOC_figure.png}
+\end{center}
+\vspace{-4pt}
+\begin{block}{What the platform offers}
+\footnotesize
+Tumor-on-chip (ToC) reproduces the tumor microenvironment in a microfluidic geometry: cancer cells, stroma, vasculature, and immune populations co-cultured under controlled conditions.
+\end{block}
+
+\vspace{2pt}
+\begin{columns}[T]
+\begin{column}{0.52\textwidth}
+\begin{exampleblock}{Glioblastoma biology on chip}
+\scriptsize
+\begin{itemize}\setlength\itemsep{2pt}
+\item U87 GBM + RFP-HBMEC + fibroblasts + THP-1 macrophages in fibrin hydrogel
+\item \textbf{M1} macrophages: anti-tumor (inflammatory)
+\item \textbf{M2} macrophages: pro-tumor (immunosuppressive)
+\item GBM microenvironment is skewed toward \textbf{M2 dominance}
+\end{itemize}
+\end{exampleblock}
+\end{column}
+\begin{column}{0.46\textwidth}
+\begin{alertblock}{The intervention on chip}
+\scriptsize
+\textbf{R848} (TLR7/8 agonist) drives \emph{repolarization}: M2\,$\rightarrow$\,M1.\\[3pt]
+\end{alertblock}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────
+% SLIDE 17 --- THE EXPERIMENTAL BOTTLENECK
+% ─────────────────────────────────────────────────────────────
+\begin{frame}{The Experimental Bottleneck --- Why a Computational Layer?}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{alertblock}{Design space is combinatorial}
+\scriptsize
+Candidate R848 schedules span:
+\begin{itemize}\setlength\itemsep{1pt}
+  \item concentration levels per week
+  \item temporal sequencing across weeks
+  \item total drug budget over a multi-week horizon
+\end{itemize}
+Even a modest grid produces \warning{hundreds of candidates} (e.g., $5^4\!\approx\!625$ for 5 doses $\times$ 4 weeks).
+\end{alertblock}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{exampleblock}{Chip data are sparse}
+\scriptsize
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Measurements are \textbf{endpoint-biased} (e.g.\ day 7)
+  \item Each chip run yields a handful of time-points\scite{Quintard2024}
+  \item Experiments are resource-intensive to set up, image, and analyze\scite{Bhatia2014,Seo2019}
+\end{itemize}
+\end{exampleblock}
+\end{column}
+\end{columns}
+
+\vspace{4pt}
+\begin{block}{Consequence}
+\footnotesize
+\centering
+Empirically exploring candidate schedules is impractical.\\
+\emphasis{A computational screening layer is needed to prioritize which schedules warrant empirical evaluation.}
+\end{block}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────
+% SLIDE 18 --- DIGITAL TWINS AS PRINCIPLED FRAMEWORK
+% ─────────────────────────────────────────────────────────────
+\begin{frame}{Digital Twins --- a Principled Framework}
+\begin{block}{Predictive Digital Twins \scite{Kapteyn2021}}
+\small
+A \textbf{predictive digital twin} is a calibrated computational model that (i)~is anchored to a specific asset or case via observed data, (ii)~makes predictions \emph{under uncertainty}, and (iii)~\emph{updates} as new measurements arrive.
+\end{block}
+
+\vspace{3pt}
+\begin{columns}[T]
+\begin{column}{0.50\textwidth}
+\begin{exampleblock}{Prior oncology DT work}
+\scriptsize
+\begin{itemize}\setlength\itemsep{1pt}
+  \item Chaudhuri et al.\supercite{Chaudhuri2023} --- radiotherapy in high-grade glioma
+  
+\end{itemize}
+Both target \textbf{longitudinal imaging} in decision support.
+\end{exampleblock}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{alertblock}{Three open problems}
+\scriptsize
+\begin{enumerate}\setlength\itemsep{1pt}
+  \item Integrate immune-microenvironment dynamics
+  \item Risk-aware optimization beyond radiotherapy
+  \item Connect DT to \textbf{organ-on-chip} platforms
+\end{enumerate}
+\emphasis{All three identified as open by Morelli et al.\supercite{ReviewDT2025}}
+\end{alertblock}
+\end{column}
+\end{columns}
+
+\vspace{4pt}
+{\footnotesize\centering
+\textbf{Gap addressed:} a DT designed for \emph{chip-endpoint} observations and \emph{schedule prioritization}.\par}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────
+% SLIDE 19 --- RESEARCH QUESTIONS
+% ─────────────────────────────────────────────────────────────
+\begin{frame}{Topic 2 --- Research Questions}
+\begin{block}{RQ1 --- Calibration}
+\small
+Can a 3-ODE tumor--macrophage model with four uncertain parameters be reliably calibrated from \textbf{sparse chip-like observations} (six data points per virtual case) to support informative virtual schedule screening via Bayesian MCMC?
+\end{block}
+
+\begin{block}{RQ2 --- Schedule prioritization under uncertainty}
+\small
+Does \textbf{risk-aware (CVaR)} schedule prioritization identify candidate dosing sequences that achieve meaningful \emph{dose de-escalation} relative to an SOC-like uniform baseline?
+\end{block}
+
+\begin{block}{RQ3 --- Mechanism \& testability}
+\small
+What \textbf{mechanistic driver} explains the prioritized scheduling pattern, and does it yield a biologically interpretable hypothesis \emph{testable} in a follow-up chip experiment?
+\end{block}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────
+% SLIDE 20 --- 4-PHASE PIPELINE OVERVIEW
+% ─────────────────────────────────────────────────────────────
+\begin{frame}{Digital-Twin Pipeline --- Four Phases}
+\vspace{-0.15cm}
+\begin{center}
+    \includegraphics[width=0.88\textwidth, height=5.8cm, keepaspectratio]{fig__.png}
+\end{center}
+\vspace{-0.1cm}
+{\centering\scriptsize\textcolor{tamu_gray}{\itshape  forward model + 100 virtual cases \Rightarrow \quad MCMC calibration (6 obs./case) \Rightarrow \quad CVaR$_{0.10}$ schedule screening \quad \Rightarrow repolarization-flux analysis}\par}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────
+% SLIDE 21 --- 3-ODE FORWARD MODEL
+% ─────────────────────────────────────────────────────────────
+\begin{frame}{The 3-ODE Forward Model}
+\begin{block}{Tumor--macrophage dynamics (states $T$, $M_1$, $M_2$)}
+\begin{align*}
+\frac{dT}{dt}   &= \underbrace{\rho\,T\!\left(1-\tfrac{T}{K}\right)}_{\text{logistic growth}}
+                   -\;\underbrace{\phi\,\frac{M_1\,T}{H+T}}_{\text{M1 cytotoxic kill}}
+\\[-2pt]
+\frac{dM_1}{dt} &= \underbrace{\frac{s\,T}{K_s+T}}_{\text{recruitment}}
+                   -\underbrace{k_{12}M_1}_{\text{M1}\to\text{M2}}
+                   +\underbrace{k_{21}M_2}_{\text{M2}\to\text{M1}}
+                   -\underbrace{\delta M_1}_{\text{turnover}}
+                   +\underbrace{u(t)\,\eta\,M_2}_{\substack{\text{R848}\\\text{repolarization}}}
+\\[-2pt]
+\frac{dM_2}{dt} &= \underbrace{\frac{s\,\xi\,T}{K_s+T}}_{\substack{\text{TME-biased}\\\text{recruitment}}}
+                   +\underbrace{k_{12}M_1}_{\text{M1}\to\text{M2}}
+                   -\underbrace{k_{21}M_2}_{\text{M2}\to\text{M1}}
+                   -\underbrace{\delta M_2}_{\text{turnover}}
+                   -\underbrace{u(t)\,\eta\,M_2}_{\substack{\text{R848}\\\text{repolarization}}}
+\end{align*}
+\end{block}
+{\scriptsize
+\textbf{Conservation:} $u(t)\eta M_2$ enters $\dot M_1$ and $\dot M_2$ with opposite signs $\Rightarrow$ R848 \emph{repolarizes} macrophages; it does not create or destroy them.
+\hfill\textit{Morales \& Soto-Ortiz 2018; Chaudhuri et al.\ 2023.}}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────
+% SLIDE 22 --- BIOLOGICAL INTERACTION DIAGRAM
+% ─────────────────────────────────────────────────────────────
+\begin{frame}[fragile]{Biological Interaction Diagram}
+\centering
+\begin{tikzpicture}[scale=0.88,
+    cell/.style={draw, circle, minimum size=1.35cm, thick,
+                 font=\scriptsize\bfseries, align=center},
+    tumorbox/.style={draw, rounded corners=8pt, thick,
+                     minimum width=4.0cm, minimum height=0.9cm,
+                     font=\scriptsize\bfseries, align=center},
+    drugbox/.style={draw, rounded corners=5pt, thick, fill=yellow!22,
+                    minimum width=3.2cm, minimum height=0.85cm,
+                    font=\scriptsize\bfseries, align=center},
+    myarr/.style={-{Stealth[length=2.5mm]}, thick},
+    lbl/.style={font=\tiny, fill=white, inner sep=1.2pt}
+]
+\node[drugbox] (drug) at (0, 3.0) {R848 \ $u(t)$ \ \tiny(TLR7/8 agonist)};
+\node[cell, fill=soft_green!25, draw=soft_green]  (M1) at (-4.0, 0.5) {M1\\\tiny anti-tumor};
+\node[cell, fill=soft_blue!25,  draw=soft_blue]   (M2) at ( 4.0, 0.5) {M2\\\tiny pro-tumor};
+\node[tumorbox, fill=soft_red!18, draw=soft_red]  (T)  at (0, -2.4) {Tumor \ $T$ \ \tiny(logistic growth)};
+
+\draw[myarr, yellow!55!black, very thick, dashed]
+    ($(drug.south)+(-0.6,0)$) -- (M1.north east)
+    node[lbl, pos=0.55, above, sloped] {result on M1};
+\draw[myarr, yellow!55!black, very thick]
+    ($(drug.south)+(0.6,0)$) -- (M2.north west)
+    node[lbl, pos=0.55, above, sloped] {$\eta\,u(t)$ converts};
+
+\draw[myarr, soft_blue!70!black]
+    ([yshift=6pt]M1.east) -- ([yshift=6pt]M2.west)
+    node[lbl, midway, above] {$k_{12}$};
+\draw[myarr, soft_green!70!black]
+    ([yshift=-6pt]M2.west) -- ([yshift=-6pt]M1.east)
+    node[lbl, midway, below] {$k_{21}$};
+
+\draw[myarr, soft_red!70!black, dashed]
+    (T.west) to[out=180, in=225, looseness=1.3]
+    node[lbl, pos=0.55, left] {$s$ recruit}
+    (M1.west);
+\draw[myarr, soft_red!70!black, dashed]
+    (T.east) to[out=0, in=-45, looseness=1.3]
+    node[lbl, pos=0.55, right] {$s\,\xi$ recruit (TME-biased)}
+    (M2.east);
+
+\draw[myarr, soft_green!70!black, very thick]
+    (M1.south) -- (T.north -| -1.2,0)
+    node[lbl, pos=0.55, right=1pt] {$\phi$ \ kill};
+
+\node[font=\tiny, text=tamu_gray, align=center] at (0, -3.9)
+  {$\xi>1$: TME biases recruitment toward immunosuppressive M2\\
+   $u(t)$: weekly R848 dose [$\mu$g/mL]; $\eta$: repolarization efficacy};
+\end{tikzpicture}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────
+% SLIDE 23 --- PARAMETERS & PRIORS
+% ─────────────────────────────────────────────────────────────
+\begin{frame}{Parameters --- 7 Fixed, 4 Uncertain (calibrated)}
+\begin{columns}[T]
+\begin{column}{0.50\textwidth}
+\begin{exampleblock}{Fixed --- anchored to experiment}
+\vspace{2pt}
+{\scriptsize
+\begin{tabular}{@{}cllp{1.8cm}@{}}
+\toprule
+\textbf{Sym.} & \textbf{Value} & \textbf{Units} & \textbf{Source} \\
+\midrule
+$K$       & 50{,}000 & cells           & Expt 1--2\\
+$H$       & 5{,}000  & cells           & $K/10$ conv.\\
+$s$       & 500      & cells\,d$^{-1}$ & Expt 2\cite{Shu2020}\\
+$K_s$     & 10{,}000 & cells           & $K/5$ conv.\\
+$k_{12}$  & 0.10     & d$^{-1}$        & Expt 4\cite{Shu2020,Morales2018}\\
+$\delta$  & 0.02     & d$^{-1}$        & \cite{Morales2018}\\
+$\eta$    & \textbf{0.28} & (d$\!\cdot\!\mu$g/mL)$^{-1}$ & \textbf{Expt 4}\\
+\bottomrule
+\end{tabular}}
+\end{exampleblock}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{block}{Uncertain --- truncated-normal priors}
+\vspace{2pt}
+{\scriptsize
+\begin{tabular}{@{}clcp{1.2cm}@{}}
+\toprule
+\textbf{Sym.} & \textbf{Prior} $\mathcal N(\mu,\sigma^2)\,|\,$bounds & \textbf{Obs.} & \textbf{Ref.}\\
+\midrule
+$\rho$    & $\mathcal N(0.25, 0.12^2)\,|\,[0.05,0.55]$ & $T(t)$ & \cite{Oraiopoulou2017,Lv2016}\\
+$\phi$    & $\mathcal N(0.05, 0.025^2)\,|\,[0.01,0.15]$ & $T$ supp. & \cite{dePillis2005,Grugan2012}\\
+$\xi$     & $\mathcal N(4.0, 1.5^2)\,|\,[1.5,10]$ & $R(t)$ & \cite{Michiba2022,Zhou2023}\\
+$k_{21}$  & $\mathcal N(0.02, 0.01^2)\,|\,[0.001,0.08]$ & $R(t)$ & \cite{Shu2020,Ryu2025}\\
+\bottomrule
+\end{tabular}}
+
+\vspace{4pt}
+{\tiny
+\textbf{Observables:} tumor count $T(t)$ and ratio $R(t)=M_2/M_1$ at $t=0,2,5$\,d $\Rightarrow$ \textbf{6 data points per virtual case}.\\[2pt]
+Initial conditions: $T(0)=2{,}500$; $M_1(0)=M_2(0)=938$ cells.}
+\end{block}
+\end{column}
+\end{columns}
+
+\vspace{3pt}
+\begin{alertblock}{}
+\centering
+\footnotesize
+\textbf{Quantity of interest (QoI):}\ TIE $=\min\{t: T(t)>0.8K\!=\!40{,}000\}$.\.\ Higher TIE $\Rightarrow$ longer immune-mediated control.
+\end{alertblock}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────
+% SLIDE 24 --- PHASE 1: VIRTUAL COHORT + TIE
+% ─────────────────────────────────────────────────────────────
+\begin{frame}{Virtual Case and TIE Distribution}
+\begin{columns}[T]
+\begin{column}{0.52\textwidth}
+\begin{center}
+    \includegraphics[width=\linewidth, height=4.8cm, keepaspectratio]{phase3_tie_comparison.png}
+\end{center}
+{\scriptsize\itshape TIE histograms: no-treatment (left), SOC (center), optimized (right).}
+\end{column}
+\begin{column}{0.46\textwidth}
+\begin{block}{Cohort \& headline}
+\scriptsize
+\begin{itemize}\setlength\itemsep{1pt}
+  \item 100 virtual cases, $\theta^{(i)}\!\sim$ priors
+  \item Solver: SciPy \texttt{solve\_ivp} RK45, rtol $10^{-6}$, atol $10^{-8}$
+  \item 0/100 solver failures
+\end{itemize}
+\end{block}
+
+\vspace{2pt}
+{\scriptsize
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Condition} & \textbf{Mean TIE (d)} & \textbf{Escaped} \\
+\midrule
+No treatment & $25.4$ & 83/100 \\
+SOC (10\,$\mu$g/mL/wk) & $33.5$ & 44/100 \\
+\bottomrule
+\end{tabular}}
+
+\vspace{4pt}
+\begin{exampleblock}{}
+\centering\scriptsize
+\good{SOC delays escape in 83/83 at-risk cases.}\\
+$\rho$ shows the strongest TIE correlation ($r\!\approx\!-0.9$).
+\end{exampleblock}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────
+% SLIDE 25 --- PHASE 2: MCMC RESULTS
+% ─────────────────────────────────────────────────────────────
+\begin{frame}{Bayesian MCMC Calibration}
+\begin{block}{Setup}
+\scriptsize
+DEMetropolisZ sampler, \ 4 chains $\times$ (4{,}000 tune + 4{,}000 draws) \ = 16{,}000 posterior samples per virtual case.\ Log-normal likelihood ($\sigma=0.15$).
+\end{block}
+
+\vspace{2pt}
+\footnotesize
+\centering
+\begin{tabular}{@{}l c c c c c@{}}
+\toprule
+\textbf{Param} & \textbf{Coverage (90\% HDI)} & \textbf{Shrinkage} & $|$\textbf{RelBias}$|$ & \textbf{Max $\hat R$} & \textbf{Mean ESS} \\
+\midrule
+\rowcolor{green!8}
+$\rho$     & \good{92\%} & 0.25 & 0.20 & 1.01 & 1{,}047 \\
+$\xi$      & 81\%        & 0.44 & 0.43 & 1.01 & 1{,}017 \\
+\rowcolor{red!5}
+$k_{21}$   & 75\%        & 0.68 & 0.76 & 1.01 & 922 \\
+\rowcolor{red!5}
+$\phi$     & 72\%        & 0.68 & 0.81 & 1.01 & 922 \\
+\bottomrule
+\end{tabular}
+
+\vspace{5pt}
+\begin{alertblock}{}
+\footnotesize
+\textbf{Identifiability hierarchy} $\rho > \xi > \phi\!\approx\!k_{21}$ is a \emph{structural} feature of the observation model --- not a sampler failure ($\hat R\le1.01$). L=Marginal parameter coverage does \textbf{not} propagate to predictions:\\
+\centering
+\good{TIE posterior-predictive coverage: 91\% (no treatment), 95\% (SOC).}
+\end{alertblock}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────
+% SLIDE 26 --- PHASE 2: PRIOR→POSTERIOR + RECOVERY
+% ─────────────────────────────────────────────────────────────
+
+% ─────────────────────────────────────────────────────────────
+% SLIDE 27 --- PHASE 3: CVaR HEADLINE
+% ─────────────────────────────────────────────────────────────
+\begin{frame}{CVaR Schedule Screening}
+\begin{block}{Risk-aware objective (Chaudhuri et al.\ 2023)}
+\vspace{-8pt}
+\begin{align*}
+\max_{\mathbf u\in\mathbb R^6}\ & \mathrm{CVaR}_{0.10}\!\left[\,\mathrm{TIE}(\boldsymbol\theta,\mathbf u)\,\right]
+\ \text{s.t.}\ 0\le u_k\le 10\,\mu\text{g/mL},\ \textstyle\sum_k u_k\le 60\,\mu\text{g/mL}
+\end{align*}
+\vspace{-10pt}
+\end{block}
+
+\scriptsize
+\centering
+\begin{tabular}{@{}l c c c c@{}}
+\toprule
+\textbf{Metric} & \textbf{No tx} & \textbf{SOC (10/wk)} & \textbf{Optimized} & \textbf{$\Delta$ (Opt$-$SOC)} \\
+\midrule
+Mean TIE (d)            & $20.5 \pm 8.5$ & $26.5 \pm 10.6$ & $26.0 \pm 10.6$ & $-0.44$ \\
+CVaR$_{10}$ TIE (d)     & 16.2           & 19.0            & 19.0            & $-0.04$ \\
+No-escape fraction      & 7.4\%          & 35.4\%          & 32.3\%          & $-3.1$\,pp \\
+Total dose ($\mu$g/mL)  & 0              & 60              & $41.4 \pm 7.0$  & \good{$-18.6$} \\
+\bottomrule
+\end{tabular}
+
+\vspace{2pt}
+\begin{alertblock}{}
+\centering\scriptsize
+\good{Equivalent TIE as SOC with 31\% less drug} \ (41.4 vs.\ 60\,$\mu$g/mL). \ 71/100 virtual cases fall within $\pm$0.5\,d of SOC.
+\end{alertblock}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────
+% SLIDE 28 --- PHASE 3b: FRONT-LOADING
+% ─────────────────────────────────────────────────────────────
+\begin{frame}{Front-Loading and Its Mechanism}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\begin{center}
+    \includegraphics[width=\linewidth, height=4.8cm, keepaspectratio]{phase3_dose_heatmap.png}
+\end{center}
+{\scriptsize\itshape Optimized dose heatmap across 100 cases. Early weeks consistently carry more drug.}
+\end{column}
+\begin{column}{0.42\textwidth}
+\footnotesize
+\textbf{Mean weekly dose:}\\[2pt]
+{\scriptsize
+\begin{tabular}{@{}l c c@{}}
+\toprule
+\textbf{Week} & \textbf{SOC} & \textbf{Opt.}\\
+\midrule
+1 & 10.0 & \emphasis{8.7}\\
+2 & 10.0 & \emphasis{8.8}\\
+3 & 10.0 & 7.1\\
+4 & 10.0 & 5.7\\
+5 & 10.0 & 5.8\\
+6 & 10.0 & 5.3\\
+\midrule
+\textbf{Total} & 60.0 & \good{41.4}\\
+\bottomrule
+\end{tabular}}
+
+\vspace{3pt}
+\begin{exampleblock}{Why front-load?}
+\scriptsize
+Repolarization flux $F(t)=u(t)\!\cdot\!\eta\!\cdot\!M_2(t)$.\\[1pt]
+Early: small tumor, large M2 $\Rightarrow$ $F$ maximized.\\
+Late: M2 partially depleted $\Rightarrow$ less efficient.
+\end{exampleblock}
+\end{column}
+\end{columns}
+
+\vspace{2pt}
+{\footnotesize\centering
+\textbf{Efficiency (cells repolarized / $\mu$g$\cdot$mL):} \good{+37\% overall}; +46\% most aggressive quartile.\par}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────
+% SLIDE 29 --- PHASE 4 INTERFACE + LIMITATIONS
+% ─────────────────────────────────────────────────────────────
+\begin{frame}{DT Interface}
+\begin{columns}[T]
+\column{0.51\textwidth}
+\begin{center}
+    \includegraphics[width=\linewidth, height=3.8cm, keepaspectratio]{portal_overview.png}
+\end{center}
+{\tiny\centering\itshape Research portal: cohort dashboard, new-case pipeline, LLM reports.\par}
+\column{0.46\textwidth}
+\begin{center}
+    \includegraphics[width=\linewidth, height=3.8cm, keepaspectratio]{Chat_bot_2.png}
+\end{center}
+{\tiny\centering\itshape Chatbot interface: natural-language Q\&A grounded in simulation data.\par}
+\end{columns}
+\vspace{6pt}
+\begin{center}
+\begin{minipage}{0.90\textwidth}
+\begin{block}{}
+\scriptsize\centering
+Local Ollama + Gemma~4 $\cdot$ context-aware Q\&A $\cdot$ structured case reports $\cdot$ end-to-end new-case pipeline
+\end{block}
+\end{minipage}
+\end{center}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────
+% SLIDE 30 --- RP1 RATIONALE + DESIGN
+% ─────────────────────────────────────────────────────────────
+\begin{frame}{Topic 2 Research Plan}
+
+{\small\textcolor{tamu_maroon}{\textbf{2.1}}\;\textit{External Benchmarking}}
+\vspace{0.04cm}
+\begin{block}{What it is}
+\footnotesize
+\emph{Retrospective external benchmarking} of the DT's mechanistic backbone against public GBM-on-chip, vascularized organ-on-chip, and GBM macrophage datasets.\\[2pt]
+\textbf{Design choice:} keep ODE structure and priors \emph{fixed}; let only study-specific observation-model parameters $\boldsymbol\psi_s$ vary across datasets.
+\end{block}
+
+\vspace{2pt}
+\scriptsize
+\begin{tabular}{@{}p{0.5cm} p{3.9cm} p{4.2cm} p{3.2cm}@{}}
+\toprule
+\textbf{Tier} & \textbf{Data source} & \textbf{What it tests} & \textbf{Outputs}\\
+\midrule
+\rowcolor{tamu_maroon!8}
+\textbf{A} & GBM-on-chip (Cui et al.) & Predictive adequacy of tumor/macrophage dynamics & Tumor burden, apoptosis, M1/M2\\
+\rowcolor{tamu_maroon!4}
+\textbf{B} & Vascularized OoC (Quintard et al.) & Platform \& observation-model shift & Perfusion, endothelial measures\\
+\rowcolor{tamu_maroon!8}
+\textbf{C} & GBM macrophage data (Ochocka; Alrefai) & Coarse M1/M2 biological consistency & Marker concordance, state ordering\\
+\bottomrule
+\end{tabular}
+
+\vspace{4pt}
+\begin{alertblock}{}
+\centering\scriptsize
+\textbf{Observation map per study:}\ $y_{s,k}(t)=h_{s,k}\!\bigl(\mathbf{x}(t;\boldsymbol\theta),\boldsymbol\psi_s\bigr)+\varepsilon_{s,k}$.
+\end{alertblock}
+\end{frame}
+
+% ─────────────────────────────────────────────────────────────
+% SLIDE 31 --- RP1 PROTOCOL & SUCCESS CRITERIA
+% ─────────────────────────────────────────────────────────────
+\begin{frame}{Topic 2 Research Plan}
+
+{\small\textcolor{tamu_maroon}{\textbf{2.1}}\;\textit{Protocol \& Success Criteria (cont.)}}
+\vspace{0.08cm}
+\begin{center}
+\begin{tikzpicture}[
+    node distance=0.22cm and 0.4cm,
+    stepbox/.style = {draw, rounded corners=3pt, minimum width=4.5cm,
+                     minimum height=0.55cm, font=\tiny, align=center,
+                     fill=tamu_maroon!8},
+    active/.style  = {draw, rounded corners=3pt, minimum width=4.5cm,
+                     minimum height=0.55cm, font=\tiny, align=center,
+                     fill=accent_teal!15},
+    arr/.style    = {-{Stealth[length=2mm]}, thick, tamu_maroon}
+]
+\node[stepbox]                (s1) {1. Assemble Tier A--C public datasets};
+\node[active, below=of s1]    (s2) {2. Define study-specific observation maps $h_{s,k}$};
+\node[stepbox, below=of s2]   (s3) {3. Run fixed mechanistic model on external conditions};
+\node[active, below=of s3]    (s4) {4. Evaluate coverage, error, ranking};
+\node[stepbox, below=of s4]   (s5) {5. Biological-consistency check (M1/M2)};
+\node[active, below=of s5]    (s6) {6. Report transportability \& boundaries};
+\draw[arr] (s1)--(s2); \draw[arr] (s2)--(s3);
+\draw[arr] (s3)--(s4); \draw[arr] (s4)--(s5);
+\draw[arr] (s5)--(s6);
+\end{tikzpicture}
+\end{center}
+\end{frame}
+% ─────────────────────────────────────────────────────────────
+% SLIDE XX --- RP3: SENSITIVITY ANALYSIS
+% ─────────────────────────────────────────────────────────────
+\begin{frame}[shrink=12]{Topic 2 Research Plan}
+
+{\small\textcolor{tamu_maroon}{\textbf{2.2}}\;\textit{Sensitivity Analysis}}
+\vspace{0.04cm}
+
+\begin{block}{Motivation}
+\scriptsize
+Result shows $\phi$ and $k_{21}$ are \textbf{prior-driven}.
+With 6 observations and 15\% noise, DT outputs (TIE, CVaR dose) may be
+sensitive to prior choices and schedule design --- both must be quantified before
+the pipeline is used.
+\end{block}
+
+\vspace{3pt}
+{\scriptsize\renewcommand{\arraystretch}{1.1}%
+{\centering
+\begin{tabular}{@{}p{2.8cm} p{4.3cm} p{3.3cm}@{}}
+\toprule
+\textbf{Analysis} & \textbf{Method} & \textbf{Output} \\
+\midrule
+\textbf{SA-1} Prior robustness &
+Perturb $\mu,\sigma$ of $\phi$ and $k_{21}$ priors $\pm$50\%; 100 virtual patients each &
+Tornado chart: $\Delta$TIE and $\Delta$CVaR-dose per hyperparameter \\[1pt]
+
+\textbf{SA-2} Observation schedule &
+Re-run MCMC on 5 alternative 6-point schedules (denser early, late extension, direct M1 readout) &
+Slope table $(\rho,\xi,\phi,k_{21})\!\times\!$sched.; min.\ schedule recovering $\phi$ \\[1pt]
+
+\textbf{SA-3} Noise floor threshold &
+Sweep $\sigma\!\in\!\{0.05,0.10,0.15,0.20,0.30\}$; fixed schedule $\{0,2,5\}$\,d &
+Id.\ curve: $R^2$ vs.\ $\sigma$; $\sigma^*$ where $\phi$ crosses $R^2\!=\!0.10$ \\[1pt]
+
+\textbf{SA-4} Reduced model &
+Fix $\phi\!=\!\mu_\phi$, $k_{21}\!=\!\mu_{k_{21}}$; compare 2-param vs.\ 4-param TIE and dose &
+TIE coverage $\Delta$, wall-clock speedup; tests whether uninformed params have leverage \\
+\bottomrule
+\end{tabular}\par}%
+}%

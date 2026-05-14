@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bayesian Digital Twin for Sparse-Data Optimization — Prashant Dhakal</title>
+  <meta name="description" content="A Bayesian digital twin that calibrates patient-specific tumor-on-chip dynamics from 6 data points and prioritizes immunotherapy schedules under CVaR risk, cutting drug exposure ~31% at parity with standard of care." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/FortAwesome/Font-Awesome@6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="projects.css" />
+</head>
+<body data-project="digital-twin">
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient__wash"></div>
+    <div class="ambient__grid"></div>
+    <div class="ambient__grain"></div>
+  </div>
+
+  <div class="reading-progress" aria-hidden="true">
+    <div class="reading-progress__bar" id="readingBar"></div>
+  </div>
+
+  <header class="proj-nav">
+    <div class="proj-nav__inner proj-container">
+      <a href="index.html#projects" class="proj-nav__back">
+        <i class="fa-solid fa-arrow-left"></i> <span>Portfolio</span>
+      </a>
+      <div class="proj-nav__crumb">
+        <span class="proj-nav__chip">Digital Twins</span>
+        <span class="proj-nav__sep">/</span>
+        <span class="proj-nav__title">Bayesian Digital Twin for Sparse-Data Optimization</span>
+      </div>
+      <button id="themeToggle" class="nav__theme" aria-label="Toggle color theme">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="proj-container">
+    <!-- 1. ABOVE THE FOLD -->
+    <section class="proj-hero">
+      <div class="proj-hero__copy">
+        <span class="proj-hero__tag">Digital Twins &middot; Bayesian ML &middot; Optimization</span>
+        <h1 class="proj-hero__title">A digital twin that <em>prioritizes experiments</em> when every run costs weeks.</h1>
+        <p class="proj-hero__pitch">
+          Calibrates a 3-ODE tumor&ndash;macrophage model from <strong>6 data points per case</strong> via MCMC,
+          then screens immunotherapy schedules under <strong>CVaR<sub>0.10</sub></strong> risk &mdash;
+          matching standard-of-care efficacy at <strong>~31% lower drug exposure</strong> across 100 virtual patients.
+        </p>
+        <ul class="proj-hero__stack">
+          <li>PyMC / DEMetropolisZ</li><li>SciPy solve_ivp</li><li>CVaR optimization</li><li>Ollama + Gemma</li><li>ArviZ</li>
+        </ul>
+        <dl class="proj-hero__metrics">
+          <div><dt>Dose reduction</dt><dd>~31<small>%</small></dd></div>
+          <div><dt>Virtual cases</dt><dd>100<small> &middot; 0 failures</small></dd></div>
+          <div><dt>Posterior coverage</dt><dd>95<small>% (SOC TIE)</small></dd></div>
+          <div><dt>Data per case</dt><dd>6<small> observations</small></dd></div>
+        </dl>
+        <p class="proj-hero__status">
+          <span class="pill pill--prep">In Preparation</span>
+        </p>
+      </div>
+      <figure class="proj-hero__graphic">
+        <img src="Projects/digital-twins/Approach.png" alt="End-to-end pipeline: physical microfluidic chip generates sparse observations that feed a digital twin engine combining a tumor-macrophage ODE, MCMC calibration, and CVaR optimization to output a front-loaded weekly dose schedule that matches no-treatment versus SOC versus optimized trajectories" />
+      </figure>
+    </section>
+
+    <!-- 2. WHY IT MATTERS -->
+    <section class="proj-section">
+      <h2>Why it matters</h2>
+      <p>
+        Tumor-on-chip platforms reproduce the tumor microenvironment in microfluidic geometry, but they are
+        slow and expensive to run and yield <strong>endpoint-biased, sparse data</strong> &mdash; a handful of
+        time-points per chip. Empirical R848 schedule discovery is a combinatorial dead-end: even a modest
+        5-dose &times; 4-week grid is <span class="kw">~625 candidates</span>.
+      </p>
+      <p>
+        The decision needed is not <em>which schedule is best on average</em>, but <em>which schedule is safe
+        for the patients who respond worst</em>. A computational layer has to calibrate from sparse observations,
+        propagate uncertainty into the objective, and rank schedules by their worst-case outcome &mdash; not their mean.
+      </p>
+    </section>
+
+    <!-- 3. HOW IT WORKS -->
+    <section class="proj-section">
+      <h2>How it works</h2>
+      <div class="proj-method">
+        <ul class="proj-list">
+          <li><strong>Mechanistic backbone.</strong> 3-ODE tumor&ndash;macrophage model with 7 fixed and <code>4 uncertain</code> parameters (&rho;, &phi;, &xi;, k<sub>21</sub>) under truncated-normal priors from cited biology.</li>
+          <li><strong>Virtual cohort.</strong> <code>100 virtual cases</code> sampled from priors; SciPy <code>solve_ivp</code> RK45 forward simulation, 0/100 solver failures across phases.</li>
+          <li><strong>MCMC calibration.</strong> <code>DEMetropolisZ</code> sampler, 4 chains &times; 8,000 draws per case (16,000 samples total). Max R&#770; &le; 1.01, mean ESS ~1,000 &mdash; clean diagnostics.</li>
+          <li><strong>Risk-aware optimization.</strong> Maximize <code>CVaR<sub>0.10</sub>[TIE(&theta;, u)]</code> over weekly dose u<sub>k</sub> &isin; [0, 10] &micro;g/mL, total budget &le; 60 &micro;g/mL.</li>
+          <li><strong>LLM-augmented portal.</strong> Local <code>Ollama + Gemma</code> stack for cohort dashboard, new-case pipeline, structured case reports, and grounded Q&amp;A. Fully on-device.</li>
+        </ul>
+        <div class="proj-method__figs">
+          <figure class="proj-figure">
+            <img class="proj-figure__media" src="Projects/digital-twins/TOC_figure.png" alt="A clear microfluidic glass slide chip held between two fingers, with labeled inlet ports on the left and outlet ports on the right and green tumor spheroid visible in the central chamber" />
+            <figcaption><b>Platform</b> The tumor-on-chip is the data source: U87 GBM spheroids with macrophages under perfused R848 dosing, observed at a small number of time-points per chip.</figcaption>
+          </figure>
+          <div class="proj-eq">
+            <span class="proj-eq__label">Macrophage repolarization flux</span>
+            F(t) = u(t) &middot; &eta; &middot; M&#8322;(t)
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. WHAT WE FOUND -->
+    <section class="proj-section">
+      <h2>What we found</h2>
+      <div class="proj-results-grid">
+        <article class="proj-stat">
+          <strong>41.4<small> vs 60 &micro;g/mL</small></strong>
+          <span>Total dose</span>
+          <em>Same TIE distribution as SOC at <strong>31% lower exposure</strong>; 71/100 cases within &plusmn;0.5 d.</em>
+        </article>
+        <article class="proj-stat">
+          <strong>+37<small>%</small></strong>
+          <span>Repolarization efficiency</span>
+          <em>Cells repolarized per &micro;g&middot;mL drug (+46% in the most aggressive quartile).</em>
+        </article>
+        <article class="proj-stat">
+          <strong>91 / 95<small>%</small></strong>
+          <span>Posterior predictive coverage</span>
+          <em>No-treatment / SOC TIE &mdash; strong despite weak marginal &phi;, k<sub>21</sub> identifiability.</em>
+        </article>
+        <article class="proj-stat">
+          <strong>8.7 &rarr; 5.3<small> &micro;g/mL</small></strong>
+          <span>Front-loaded schedule</span>
+          <em>Optimal weekly dose decays through the cycle as M&#8322; population shrinks.</em>
+        </article>
+      </div>
+
+      <div class="proj-gallery">
+        <figure class="proj-figure">
+          <img class="proj-figure__media" src="Projects/digital-twins/phase3_tie_comparison.png" alt="Two side-by-side box plots comparing Mean TIE and Risk-Aware TIE worst 10 percent across no-treatment, SOC 10 per week, and Optimized regimens across 100 virtual patients; SOC and Optimized show overlapping distributions while no-treatment sits clearly lower" />
+          <figcaption><b>Parity</b> Mean and risk-aware (CVaR<sub>10</sub>) tumor-immune-equilibrium days &mdash; the Optimized regimen matches SOC distributionally while using a third less drug.</figcaption>
+        </figure>
+        <figure class="proj-figure">
+          <img class="proj-figure__media" src="Projects/digital-twins/phase3_dose_heatmap.png" alt="Heatmap of weekly R848 dose across 100 patients sorted by no-treatment TIE aggressiveness, with darker columns in weeks 1 and 2 and lighter columns in weeks 5 and 6 indicating front-loaded dosing" />
+          <figcaption><b>Front-loading</b> Weekly dose heatmap across 100 cases &mdash; weeks 1&ndash;2 carry the heaviest dose where the M&#8322; pool is largest, weeks 5&ndash;6 ease off.</figcaption>
+        </figure>
+        <figure class="proj-figure">
+          <img class="proj-figure__media" src="Projects/digital-twins/phase2_prior_vs_posterior.png" alt="Four small panels showing prior versus posterior density curves for tumor proliferation rate rho, M1 kill rate phi, M2 over M1 recruitment bias xi, and M2 to M1 switch rate k21; rho concentrates noticeably tighter than the prior while phi and k21 nearly overlap their priors" />
+          <figcaption><b>Identifiability</b> Posteriors over the four free parameters &mdash; &rho; concentrates sharply, &phi; and k<sub>21</sub> stay close to the prior. The hierarchy is the honest answer about what 6 data points can resolve.</figcaption>
+        </figure>
+        <figure class="proj-figure proj-figure--wide">
+          <video class="proj-figure__media" autoplay muted loop playsinline controls preload="auto" poster="Projects/digital-twins/portal_overview.png" style="aspect-ratio: 16 / 9; max-height: none; padding: 0;">
+            <source src="Projects/digital-twins/portal_recording.mp4" type="video/mp4" />
+            <img src="Projects/digital-twins/portal_overview.png" alt="Tumor-on-chip digital twin web portal dashboard with cohort metrics and per-parameter calibration table" />
+          </video>
+          <figcaption><b>Portal in action</b> Dashboard, new-case pipeline, calibration drill-down, and grounded Q&amp;A &mdash; all on-device, no cloud calls.</figcaption>
+        </figure>
+        <figure class="proj-figure">
+          <img class="proj-figure__media" src="Projects/digital-twins/Chat_bot_2.png" alt="LLM chatbot panel inside the portal answering a query about its own role, listing the 3 ODE model, calibration parameters, and therapeutic outcomes it can reason about, with a disclaimer that the document represents a simulated clinical modeling exercise" />
+          <figcaption><b>Grounded Q&amp;A</b> Local Gemma model answers structured questions over the cohort &mdash; every answer traceable to a simulation case.</figcaption>
+        </figure>
+      </div>
+
+      <p class="proj-impact">
+        <strong>So what.</strong> Risk-aware decision support for any domain where each experiment is a serious
+        commitment of time, money, or samples &mdash; catalyst tuning, electrochemical screening, alloy thermal
+        cycles. The deliverable is not a point prediction but a defensible ranking under posterior uncertainty.
+      </p>
+    </section>
+
+    <!-- 5. PAPER & RESOURCES -->
+    <section class="proj-section">
+      <h2>Paper &amp; resources</h2>
+      <div class="proj-resources">
+        <a class="proj-resource" href="#" aria-disabled="true">
+          <i class="fa-solid fa-hourglass-half"></i>
+          <div>
+            <span>Manuscript</span>
+            <strong>In preparation &middot; 2026</strong>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square proj-resource__go"></i>
+        </a>
+        <a class="proj-resource" href="https://doi.org/10.1038/s43588-021-00069-0" target="_blank" rel="noopener">
+          <i class="fa-solid fa-book"></i>
+          <div>
+            <span>Predictive DT framework</span>
+            <strong>Kapteyn, Pretorius &amp; Willcox &mdash; <em>Nat. Comp. Sci.</em> (2021)</strong>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square proj-resource__go"></i>
+        </a>
+        <a class="proj-resource" href="https://doi.org/10.1186/s40425-017-0313-7" target="_blank" rel="noopener">
+          <i class="fa-solid fa-book"></i>
+          <div>
+            <span>Tumor&ndash;macrophage ODE basis</span>
+            <strong>Mahlbacher et&nbsp;al. &mdash; <em>J. ImmunoTherapy Cancer</em> (2018)</strong>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square proj-resource__go"></i>
+        </a>
+        <a class="proj-resource" href="https://scholar.google.com/citations?user=SEhDRjNTLyMC&hl=en" target="_blank" rel="noopener">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <div>
+            <span>Author</span>
+            <strong>Prashant Dhakal</strong>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square proj-resource__go"></i>
+        </a>
+      </div>
+
+      <div class="proj-citation">
+        <div class="proj-citation__head">
+          <span>BibTeX &middot; in preparation</span>
+          <button class="proj-citation__copy" data-copy-target="cite-bdt" aria-label="Copy BibTeX">
+            <i class="fa-regular fa-copy"></i> Copy
+          </button>
+        </div>
+<pre id="cite-bdt">@unpublished{dhakal2026bdt,
+  title   = {A Bayesian Digital Twin for Risk-Aware Schedule Prioritization under Sparse Tumor-on-Chip Observations},
+  author  = {Dhakal, Prashant and Wang, Shiren},
+  year    = {2026}, note = {Manuscript in preparation; PhD dissertation Topic~2}
+}</pre>
+      </div>
+
+      <ul class="proj-chips-inline">
+        <li class="proj-chips-inline__label">Skills</li>
+        <li>Bayesian inference / MCMC</li>
+        <li>PyMC / DEMetropolisZ</li>
+        <li>Mechanistic ODE modeling</li>
+        <li>SciPy solve_ivp</li>
+        <li>HDI / ESS / R&#770; / coverage</li>
+        <li>CVaR optimization</li>
+        <li>Identifiability analysis</li>
+        <li>Prior elicitation</li>
+        <li>Posterior predictive checks</li>
+        <li>Ollama / Gemma</li>
+        <li>Local RAG &amp; portal dev</li>
+        <li>ArviZ / pandas / NumPy</li>
+      </ul>
+    </section>
+
+    <nav class="proj-footernav">
+      <a class="proj-footernav__back" href="index.html#projects">
+        <i class="fa-solid fa-arrow-left"></i> <span>All projects</span>
+      </a>
+      <div class="proj-footernav__siblings">
+        <a class="proj-footernav__prev" href="physics-informed-lpbf.html">
+          <span><i class="fa-solid fa-arrow-left"></i> Previous</span>
+          <strong>Physics-Informed Few-Shot LPBF</strong>
+        </a>
+        <a class="proj-footernav__next" href="sustainable-ceramic-am.html">
+          <span>Next <i class="fa-solid fa-arrow-right"></i></span>
+          <strong>Energy-Efficient Ceramic AM</strong>
+        </a>
+      </div>
+    </nav>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>&copy; <span id="year"></span> Prashant Dhakal <span>&middot; Built in the open, perpetually under revision.</span></p>
+      <a href="#" class="footer__up" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></a>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox__close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    <div class="lightbox__inner">
+      <img class="lightbox__img" alt="" />
+      <div class="lightbox__caption"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="projects.js"></script>
+</body>
+</html>
